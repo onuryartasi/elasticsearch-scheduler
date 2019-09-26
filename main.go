@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"log"
 	"strings"
@@ -22,15 +23,19 @@ func main() {
 	es, _ := elasticsearch.NewDefaultClient()
 
 
-	//todo: index create with spesific shard number
 
-	req := esapi.IndexRequest{Index:"test",Body:strings.NewReader("{\"title\":\"test\"}"),WaitForActiveShards:"1"}
-	res, err := req.Do(context.Background(),es)
-	if err != nil {
-		log.Fatalf("%s",err)
-	}
-	defer res.Body.Close()
-	log.Printf("%s",res)
+	//
+	////todo: index create with spesific shard number
+	//
+	//req := esapi.IndexRequest{Index:"test",Body:strings.NewReader("{\"title\":\"test\"}"),WaitForActiveShards:"1"}
+	//res, err := req.Do(context.Background(),es)
+	//if err != nil {
+	//	log.Fatalf("%s",err)
+	//}
+	//defer res.Body.Close()
+	//log.Printf("%s",res)
+
+
 
 	////todo: delete index
 	//deleteReq := esapi.DeleteRequest{Index:"test"}
@@ -41,5 +46,24 @@ func main() {
 	//}
 	//defer res.Body.Close()
 	//fmt.Printf("%s",res)
+
+
+
+	//todo: deletebyquery
+	body := `{
+	"query": {
+		"match":{"author.first_name":"asd"}
+	}
+}`
+
+	deleteReq := esapi.DeleteByQueryRequest{Index:[]string{"articles"},Body:strings.NewReader(fmt.Sprintf("%s",body))}
+	deleteRes,err := deleteReq.Do(context.Background(),es)
+
+	if err != nil {
+		log.Fatalf("%s",err)
+	}
+
+	defer deleteRes.Body.Close()
+	fmt.Println(deleteRes)
 
 }
