@@ -7,6 +7,7 @@ import (
 	"log"
 	"strings"
 
+	cron "elastic/pkg/schduler"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
@@ -65,5 +66,8 @@ func main() {
 
 	defer deleteRes.Body.Close()
 	fmt.Println(deleteRes)
+	cron.Scheduler()
+
+
 
 }

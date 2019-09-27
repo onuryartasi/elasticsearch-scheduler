@@ -1,2 +1,6 @@
 github.com/elastic/go-elasticsearch/v8 v8.0.0-20190910075000-5963931cb201 h1:WNvOJ6h6ZjfFqKJvRMDMZUTE4ksviqa+9KXmzUGDvdI=
 github.com/elastic/go-elasticsearch/v8 v8.0.0-20190910075000-5963931cb201/go.mod h1:xe9a/L2aeOgFKKgrO3ibQTnMdpAeL0GC+5/HpGScSa4=
+github.com/jasonlvhit/gocron v0.0.0-20190920201010-985d45da66c5 h1:m1t5VsnIRS9HY+X/NReDtPvLriGcMx3Foc8a97Ogyyk=
+github.com/jasonlvhit/gocron v0.0.0-20190920201010-985d45da66c5/go.mod h1:rwi/esz/h+4oWLhbWWK7f6dtmgLzxeZhnwGr7MCsTNk=
+github.com/robfig/cron/v3 v3.0.0 h1:kQ6Cb7aHOHTSzNVNEhmp8EcWKLb4CbiMW9h9VyIhO4E=
+github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
