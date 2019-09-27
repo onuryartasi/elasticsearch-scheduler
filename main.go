@@ -1,73 +1,23 @@
 package main
 
 import (
-	"context"
+	"elastic/pkg/elasticsearch"
+	"elastic/pkg/schduler"
 	"fmt"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"log"
-	"strings"
-
-	cron "elastic/pkg/schduler"
-	"github.com/elastic/go-elasticsearch/v8"
 )
-
-
 
 func main() {
 
-	//cfg := elasticsearch.Config{
-	//	Addresses: []string{
-	//		"http://elasticsearch.bilyoner.com:9200",
-	//	},
-	//}
-	//es, _ := elasticsearch.NewClient(cfg)
-	es, _ := elasticsearch.NewDefaultClient()
+	var messages = make(chan string)
+	c := schduler.Cron()
+	c.AddFunc("@every 10s", func(){
+		 messages <- elasticsearch.RunDeleteByQuery()
+	})
+	c.Start()
 
 
-
-	//
-	////todo: index create with spesific shard number
-	//
-	//req := esapi.IndexRequest{Index:"test",Body:strings.NewReader("{\"title\":\"test\"}"),WaitForActiveShards:"1"}
-	//res, err := req.Do(context.Background(),es)
-	//if err != nil {
-	//	log.Fatalf("%s",err)
-	//}
-	//defer res.Body.Close()
-	//log.Printf("%s",res)
-
-
-
-	////todo: delete index
-	//deleteReq := esapi.DeleteRequest{Index:"test"}
-	//res, err = deleteReq.Do(context.Background(),es)
-	//
-	//if err != nil {
-	//	log.Fatalf("%s",err)
-	//}
-	//defer res.Body.Close()
-	//fmt.Printf("%s",res)
-
-
-
-	//todo: deletebyquery
-	body := `{
-	"query": {
-		"match":{"author.first_name":"asd"}
+	for data := range messages{
+		fmt.Println(data)
 	}
-}`
-
-	deleteReq := esapi.DeleteByQueryRequest{Index:[]string{"articles"},Body:strings.NewReader(fmt.Sprintf("%s",body))}
-	deleteRes,err := deleteReq.Do(context.Background(),es)
-
-	if err != nil {
-		log.Fatalf("%s",err)
-	}
-
-	defer deleteRes.Body.Close()
-	fmt.Println(deleteRes)
-	cron.Scheduler()
-
-
 
 }
