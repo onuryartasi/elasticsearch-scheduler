@@ -1,5 +1,6 @@
 rules:
   - name: CleanAllNameIsJohn
+    index: ["articles"]
     type: deletebyquery
     cron: "@every 1h"
     body: |
@@ -9,6 +10,7 @@ rules:
       	}
       }
   - name: CleanData
+    index: ["articles"]
     type: deletebyquery
     cron: "@every 5h"
     body: |
@@ -17,7 +19,8 @@ rules:
       		"match":{"author.last_name":"Smith"}
       	}
       }
-  - name: CleanMessage
+  - name: CleanFirstNameIsJohnEveryFiveSecond,
+    index: ["articles"]
     type: deletebyquery
     cron: "@every 5s"
     body: |

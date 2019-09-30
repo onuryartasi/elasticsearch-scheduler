@@ -12,7 +12,6 @@ import (
 func Cron() *cron.Cron {
 	var c *cron.Cron
 	DEBUG := os.Getenv("DEBUG")
-
 	if DEBUG == "true"{
 		c = cron.New(
 			cron.WithLogger(
@@ -20,7 +19,6 @@ func Cron() *cron.Cron {
 	}else {
 		c = cron.New()
 	}
-
 	return c
 }
 
@@ -31,7 +29,6 @@ func GetRule() Rules {
 	if err != nil {
 		log.Fatalf("Can't read Rulefile, %s", err)
 	}
-
 	err = yaml.Unmarshal([]byte(data), &rules)
 	if err != nil {
 		log.Fatalf("%s",err)
