@@ -15,11 +15,11 @@ func main() {
 	//lenRules := len(rules.Rule)
 
 	for _,rule := range rules.Rule {
-		go func(jobName string,cron string) {
+		go func(jobName string,cron string,body string) {
 			c.AddFunc(cron, func() {
-				messages <- fmt.Sprintf("%s %s",jobName, elasticsearch.RunDeleteByQuery())
+				messages <- fmt.Sprintf("%s %s",jobName, elasticsearch.RunDeleteByQuery(body))
 			})
-		}(rule.Name,rule.Cron)
+		}(rule.Name,rule.Cron,rule.Body)
 	}
 
 

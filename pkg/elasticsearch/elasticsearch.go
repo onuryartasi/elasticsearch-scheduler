@@ -20,16 +20,16 @@ import (
 
 var es,_ = elasticsearch.NewDefaultClient()
 
-func RunDeleteByQuery() string{
+func RunDeleteByQuery(bodys string) string{
 	//todo: deletebyquery
 
-	body := `{
-	"query": {
-		"match":{"author.first_name":"John"}
-	}
-}`
+//	body := `{
+//	"query": {
+//		"match":{"author.first_name":"John"}
+//	}
+//}`
 
-	deleteReq := esapi.DeleteByQueryRequest{Index:[]string{"articles"},Body:strings.NewReader(fmt.Sprintf("%s",body))}
+	deleteReq := esapi.DeleteByQueryRequest{Index:[]string{"articles"},Body:strings.NewReader(fmt.Sprintf("%s",bodys))}
 	deleteRes,err := deleteReq.Do(context.Background(),es)
 
 	if err != nil {

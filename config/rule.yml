@@ -1,10 +1,28 @@
 rules:
   - name: CleanAllNameIsJohn
     type: deletebyquery
-    cron: "@every 1s"
+    cron: "@every 1h"
+    body: |
+      {
+      	"query": {
+      		"match":{"author.first_name":"John"}
+      	}
+      }
   - name: CleanData
     type: deletebyquery
-    cron: "@every 5s"
+    cron: "@every 5h"
+    body: |
+      {
+      	"query": {
+      		"match":{"author.last_name":"Smith"}
+      	}
+      }
   - name: CleanMessage
     type: deletebyquery
     cron: "@every 5s"
+    body: |
+      {
+      	"query": {
+      		"match":{"author.first_name":"John"}
+      	}
+      }
