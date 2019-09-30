@@ -1,0 +1,10 @@
+rules:
+  - name: CleanAllNameIsJohn
+    type: deletebyquery
+    cron: "@every 1s"
+  - name: CleanData
+    type: deletebyquery
+    cron: "@every 5s"
+  - name: CleanMessage
+    type: deletebyquery
+    cron: "@every 5s"

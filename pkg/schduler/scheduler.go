@@ -2,6 +2,8 @@ package schduler
 
 import (
 	"github.com/robfig/cron/v3"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -20,4 +22,19 @@ func Cron() *cron.Cron {
 	}
 
 	return c
+}
+
+
+func GetRule() Rules {
+	var rules Rules
+	data, err := ioutil.ReadFile("config/rule.yml")
+	if err != nil {
+		log.Fatalf("Can't read Rulefile, %s", err)
+	}
+
+	err = yaml.Unmarshal([]byte(data), &rules)
+	if err != nil {
+		log.Fatalf("%s",err)
+	}
+	return rules
 }

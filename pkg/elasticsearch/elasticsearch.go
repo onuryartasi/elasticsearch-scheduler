@@ -41,7 +41,7 @@ func RunDeleteByQuery() string{
 	if err != nil {
 		log.Fatalf("%s",err)
 	}
-	return string(response)
+	return fmt.Sprintf("%s",string(response))
 
 
 }
