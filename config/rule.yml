@@ -1,4 +1,4 @@
-rules:
+it rules:
   deletebyquery:
     - name: CleanAllNameIsJohn
       index: ["articles"]
@@ -21,7 +21,7 @@ rules:
         }
     - name: CleanFirstNameIsJohnEveryFiveSecond,
       index: ["articles"]
-      cron: "@every 5s"
+      cron: "@every 10s"
       body: |
         {
         	"query": {
