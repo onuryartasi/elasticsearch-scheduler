@@ -23,15 +23,13 @@ func Cron() *cron.Cron {
 }
 
 
-func GetRule() Rules {
-	var rules Rules
+func GetRule(rules *Rulesfile) {
 	data, err := ioutil.ReadFile("config/rule.yml")
 	if err != nil {
 		log.Fatalf("Can't read Rulefile, %s", err)
 	}
-	err = yaml.Unmarshal([]byte(data), &rules)
+	err = yaml.Unmarshal([]byte(data), rules)
 	if err != nil {
 		log.Fatalf("%s",err)
 	}
-	return rules
 }
