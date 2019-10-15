@@ -14,7 +14,6 @@ type SearchCount struct {
 	Shards *Shards `json:"_shards"`
 	Count int `json:"count"`
 
-
 }
 type Shards struct {
 	Total int `json:"total"`
@@ -22,10 +21,15 @@ type Shards struct {
 	Skipped int `json:"skipped"`
 	Failed int `json:"failed"`
 }
+type Alert struct {
+	Name  string   `yaml:"name,omitempty"`
+	Cron  string   `yaml:"cron"`
+	Index []string `yaml:"index,omitempty"`
+	Since string `yaml:"since"`
+	Query string `yaml:"query"`
+}
 
-
-
-func  RunCount()  string {
+func (instance Alert) Run()  string {
 	query := `{"query": {
     "bool": {
       "must": [
@@ -53,7 +57,7 @@ func  RunCount()  string {
 `
 
 	count := &SearchCount{Shards:&Shards{},}
-	req := esapi.CountRequest{Index:[]string{"articles"},Body:strings.NewReader(fmt.Sprintf(query,"15m","Alice"))}
+	req := esapi.CountRequest{Index:instance.Index,Body:strings.NewReader(fmt.Sprintf(query,instance.Since,instance.Query))}
 
 
 	response,err := req.Do(context.Background(),es)
@@ -69,8 +73,6 @@ func  RunCount()  string {
 	if err !=nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(responseBody))
 	defer response.Body.Close()
-	fmt.Println(count.Count)
-	return fmt.Sprintf("%d",count)
+	return fmt.Sprintf("%d",count.Count)
 }

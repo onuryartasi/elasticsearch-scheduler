@@ -14,7 +14,6 @@ import (
 
 
 func main() {
-	elasticsearch.RunCount()
 	var messages= make(chan string)
 	var sig = make(chan bool)
 	c := schduler.Cron()
@@ -46,8 +45,8 @@ func applyRule(rules *schduler.Rulesfile,c *cron.Cron,messages chan string){
 		}(instance)
 	}
 
-	for _, instance := range rules.Rules.DeleteByQuery {
-		go func(instance elasticsearch.DeleteByQuery) {
+	for _, instance := range rules.Rules.Alert {
+		go func(instance elasticsearch.Alert) {
 			c.AddFunc(instance.Cron, func() {
 				messages <- fmt.Sprintf("%s %s", instance.Name, instance.Run())
 			})

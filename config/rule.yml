@@ -29,9 +29,9 @@ rules:
         		"match":{"author.first_name":"John"}
         	}
         }
-
   alert:
     - name: AliceCount
       index: ["articles"]
-      cron: "@every 1m"
-      since: 10
+      cron: "@every 2s"
+      query: "Alice"
+      since: 15m
