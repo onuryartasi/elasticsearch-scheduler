@@ -70,7 +70,6 @@ func (instance DeleteByQuery) Run()  string {
 	if instance.Conflicts != "proceed"{
 		instance.Conflicts = "abort"
 	}
-
 	req := esapi.DeleteByQueryRequest{
 		Index:instance.Index,
 		Body:strings.NewReader(instance.Body),
@@ -87,7 +86,7 @@ func (instance DeleteByQuery) Run()  string {
 
 	response,err := req.Do(context.Background(),es)
 	if err != nil {
-		return fmt.Sprintf("Request DeleteByQuery erroo, %s",err)
+		return fmt.Sprintf("Request DeleteByQuery error, %s",err)
 	}
 	responseBody,err:= ioutil.ReadAll(response.Body)
 	if err != nil {

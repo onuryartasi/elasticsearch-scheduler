@@ -1,4 +1,4 @@
-it rules:
+rules:
   deletebyquery:
     - name: CleanAllNameIsJohn
       index: ["articles"]
@@ -12,19 +12,26 @@ it rules:
     - name: CleanData
       index: ["articles"]
       from: 0
-      cron: "@every 5h"
+      conflict: proceed
+      cron: "@every 1m"
       body: |
         {
         	"query": {
-        		"match":{"author.last_name":"Smith"}
+        		"match":{"author.last_name":"ahmet"}
         	}
         }
-    - name: CleanFirstNameIsJohnEveryFiveSecond,
+    - name: CleanFirstNameIsJohnEveryFiveSecond
       index: ["articles"]
-      cron: "@every 10s"
+      cron: "@every 1m"
       body: |
         {
         	"query": {
         		"match":{"author.first_name":"John"}
         	}
         }
+
+  alert:
+    - name: AliceCount
+      index: ["articles"]
+      cron: "@every 1m"
+      since: 10

@@ -14,6 +14,7 @@ import (
 
 
 func main() {
+	elasticsearch.RunCount()
 	var messages= make(chan string)
 	var sig = make(chan bool)
 	c := schduler.Cron()
@@ -24,14 +25,11 @@ func main() {
 	go listener(messages)
 	for{
 		if <-sig == true{
-			fmt.Println("im in")
+			fmt.Println("Rulefile changed!")
 			removeJobs(c)
 			applyRule(&rules,c,messages)
 		}
 	}
-
-
-	// Listen messages channel
 
 }
 
@@ -47,6 +45,16 @@ func applyRule(rules *schduler.Rulesfile,c *cron.Cron,messages chan string){
 			})
 		}(instance)
 	}
+
+	for _, instance := range rules.Rules.DeleteByQuery {
+		go func(instance elasticsearch.DeleteByQuery) {
+			c.AddFunc(instance.Cron, func() {
+				messages <- fmt.Sprintf("%s %s", instance.Name, instance.Run())
+			})
+		}(instance)
+	}
+
+
 }
 
 
@@ -87,5 +95,6 @@ func fileChecker(sig chan<- bool){
 func listener(messages chan string){
 	for data := range messages{
 		log.Printf("%s",data)
+		//slack.SendMessage("test")
 	}
 }
