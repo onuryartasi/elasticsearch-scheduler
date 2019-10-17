@@ -27,6 +27,7 @@ type Alert struct {
 	Index []string `yaml:"index,omitempty"`
 	Since string `yaml:"since"`
 	Query string `yaml:"query"`
+	TimeField string `yaml:"timefield"`
 }
 
 func (instance Alert) Run()  string {
@@ -35,30 +36,44 @@ func (instance Alert) Run()  string {
       "must": [
         {
           "range": {
-            "published": {
+            "%s": {
               "format": "strict_date_optional_time",
               "gte": "now-%s"
             }
           }
         }
-      ],
-      "filter": [
-        {
-          "multi_match": {
-            "type": "best_fields",
-            "query": "%s",
-            "lenient": true
-          }
-        }
       ]
+		%s
     }
   }
 }
 `
 
-	count := &SearchCount{Shards:&Shards{},}
-	req := esapi.CountRequest{Index:instance.Index,Body:strings.NewReader(fmt.Sprintf(query,instance.Since,instance.Query))}
+	filter := `,
+      "filter": [
+        {
+          "query_string": {
+            "type": "phrase",
+            "query": "/.*%s.*/"
+          }
+        }
+      ]`
 
+	if len(instance.TimeField)==0{
+		instance.TimeField = "@timestamp"
+	}
+	if len(instance.Since)==0{
+		instance.Since = "15m"
+	}
+	if len(instance.Query)>0{
+		filter =fmt.Sprintf(filter,instance.Query)
+	}else {
+		filter=""
+	}
+
+	query = fmt.Sprintf(query,instance.TimeField,instance.Since,filter)
+	count := &SearchCount{Shards:&Shards{},}
+	req := esapi.CountRequest{Index:instance.Index,Body:strings.NewReader(query)}
 
 	response,err := req.Do(context.Background(),es)
 	if err!=nil{

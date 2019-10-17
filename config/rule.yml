@@ -22,16 +22,17 @@ rules:
         }
     - name: CleanFirstNameIsJohnEveryFiveSecond
       index: ["articles"]
-      cron: "@every 1m"
+      cron: "@every 1h"
       body: |
         {
         	"query": {
-        		"match":{"author.first_name":"John"}
+        		"match":{"author.first_name":"Alice"}
         	}
         }
   alert:
-    - name: AliceCount
+    - name: MaryCount
       index: ["articles"]
-      cron: "@every 2s"
-      query: "Alice"
+      cron: "@every 3s"
+      timefield: "published"
+      query: "Title 33"
       since: 15m
