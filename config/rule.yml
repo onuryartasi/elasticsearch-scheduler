@@ -1,38 +1,40 @@
 rules:
   deletebyquery:
     - name: CleanAllNameIsJohn
-      index: ["articles"]
-      cron: "@every 1h"
-      body: |
-        {
-        	"query": {
-        		"match":{"author.first_name":"John"}
-        	}
-        }
-    - name: CleanData
-      index: ["articles"]
-      from: 0
-      conflict: proceed
-      cron: "@every 1m"
-      body: |
-        {
-        	"query": {
-        		"match":{"author.last_name":"ahmet"}
-        	}
-        }
-    - name: CleanFirstNameIsJohnEveryFiveSecond
-      index: ["articles"]
-      cron: "@every 1h"
-      body: |
-        {
-        	"query": {
-        		"match":{"author.first_name":"Alice"}
-        	}
-        }
-  alert:
-    - name: MaryCount
-      index: ["articles"]
-      cron: "@every 3s"
-      timefield: "published"
-      query: "Title 33"
-      since: 15m
+      index: ["openshift-2019.11.06"]
+      cron: "@every 1s"
+      timefield: "@timestamp"
+      query: "cannot found status on redis"
+      conflicts: proceed
+      since: 40d
+#     scroll_size: 100
+#      scroll: 500
+      max_docs: 10000
+
+#    - name: CleanData
+#      index: ["articles"]
+#      from: 0
+#      conflict: proceed
+#      cron: "@every 1h"
+#      body: |
+#        {
+#        	"query": {
+#        		"match":{"author.last_name":"ahmet"}
+#        	}
+#        }
+#    - name: CleanFirstNameIsJohnEveryFiveSecond
+#      index: ["articles"]
+#      cron: "@every 1h"
+#      body: |
+#        {
+#        	"query": {
+#        		"match":{"author.first_name":"Alice"}
+#        	}
+#        }
+#  alert:
+#    - name: MaryCount
+#      index: ["openshift-2019.11.06"]
+#      cron: "@every 1m"
+#      timefield: "@timestamp"
+#      query: "cannot found status on redis"
+#      since: 40d

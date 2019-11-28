@@ -13,7 +13,9 @@ import (
 )
 
 
+
 func main() {
+	elasticsearch.EsClient()
 	var messages= make(chan string)
 	var sig = make(chan bool)
 	c := schduler.Cron()
@@ -39,6 +41,7 @@ func applyRule(rules *schduler.Rulesfile,c *cron.Cron,messages chan string){
 
 	for _, instance := range rules.Rules.DeleteByQuery {
 		go func(instance elasticsearch.DeleteByQuery) {
+			log.Printf("%s, Thread Starting...!",instance.Name)
 			c.AddFunc(instance.Cron, func() {
 				messages <- fmt.Sprintf("%s %s", instance.Name, instance.Run())
 			})
@@ -49,9 +52,12 @@ func applyRule(rules *schduler.Rulesfile,c *cron.Cron,messages chan string){
 		go func(instance elasticsearch.Alert) {
 			c.AddFunc(instance.Cron, func() {
 				messages <- fmt.Sprintf("%s %s", instance.Name, instance.Run())
+				//slack.SendMessage("test")
 			})
 		}(instance)
+
 	}
+
 
 
 }
@@ -94,6 +100,6 @@ func fileChecker(sig chan<- bool){
 func listener(messages chan string){
 	for data := range messages{
 		log.Printf("%s",data)
-		//slack.SendMessage("test")
+		//slack.SendMessage(data)
 	}
 }

@@ -11,13 +11,16 @@ import (
 
 func Cron() *cron.Cron {
 	var c *cron.Cron
+	var DefaultLogger cron.Logger = cron.PrintfLogger(log.New(os.Stdout, "cron: ", log.LstdFlags))
 	DEBUG := os.Getenv("DEBUG")
 	if DEBUG == "true"{
 		c = cron.New(
 			cron.WithLogger(
 				cron.VerbosePrintfLogger(log.New(os.Stdout, "Schedule: ", log.LstdFlags))))
 	}else {
-		c = cron.New()
+		c = cron.New((cron.WithChain(
+			cron.SkipIfStillRunning(DefaultLogger),
+		)))
 	}
 	return c
 }
