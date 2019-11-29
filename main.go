@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"elastic/pkg/elasticsearch"
 	"elastic/pkg/schduler"
+	"flag"
 	"fmt"
 	"github.com/robfig/cron/v3"
 	"io"
@@ -13,9 +14,14 @@ import (
 )
 
 
-
+var configPath string
+var esHost string
+var port string
 func main() {
-	elasticsearch.EsClient()
+	flag.StringVar(&configPath,"config","config/rule.yml","--config config/path ")
+	flag.StringVar(&esHost,"host","http://localhost:9200","--config example.com:9200")
+	flag.Parse()
+	elasticsearch.EsClient(esHost)
 	var messages= make(chan string)
 	var sig = make(chan bool)
 	c := schduler.Cron()

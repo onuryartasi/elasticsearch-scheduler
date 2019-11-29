@@ -17,14 +17,14 @@ import (
 //es, _ := elasticsearch.NewClient(cfg)
 
 var es,_ = elasticsearch.NewDefaultClient()
-func EsClient(){
-	os.Setenv("ES_HOST","http://es02.bilyoner.com:9200")
+func EsClient(host string){
+
 	if len(os.Getenv("ES_HOST")) > 0 {
-		fmt.Println("Ok")
-		var  cfg = elasticsearch.Config{Addresses:[]string{fmt.Sprintf(os.Getenv("ES_HOST"))}}
-		es,_ = elasticsearch.NewClient(cfg)
+		host = os.Getenv("ES_HOST")
 	}
 
+	var  cfg = elasticsearch.Config{Addresses:[]string{fmt.Sprintf(host)}}
+	es,_ = elasticsearch.NewClient(cfg)
 }
 
 //func deleteByQuery(index []string,body string) string{
